@@ -4,7 +4,7 @@
             "outputFile": "com.example.water_quality.app-mergeDebugResources-28:/values-night-v8/values-night-v8.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\sudhe\\Documents\\VSCODE\\Projects\\water_quality\\android\\app\\src\\main\\res\\values-night\\styles.xml",
+                    "source": "C:\\Users\\shalo\\Desktop\\IOT\\water_quality\\android\\app\\src\\main\\res\\values-night\\styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",

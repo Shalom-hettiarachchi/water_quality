@@ -12,8 +12,8 @@ dependencies:
   firebase_core: ^2.4.1
   firebase_database: ^10.0.9
   cloud_firestore: ^4.3.1
-  syncfusion_flutter_gauges: ^20.4.48
-  syncfusion_flutter_charts: ^20.4.48
+  syncfusion_flutter_gauges: ^29.1.39
+  syncfusion_flutter_charts: ^29.1.39
   intl: ^0.18.1
 
 dev_dependencies:

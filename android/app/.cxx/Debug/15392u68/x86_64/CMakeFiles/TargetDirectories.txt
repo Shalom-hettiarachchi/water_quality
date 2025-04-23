@@ -1,0 +1,2 @@
+C:/Users/shalo/Desktop/IOT/water_quality/android/app/.cxx/Debug/15392u68/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/shalo/Desktop/IOT/water_quality/android/app/.cxx/Debug/15392u68/x86_64/CMakeFiles/rebuild_cache.dir

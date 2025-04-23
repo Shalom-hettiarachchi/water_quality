@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart' as gauges;
+import 'package:syncfusion_flutter_charts/charts.dart' as charts;
 
 // Data model
 class SensorDataPoint {
@@ -35,10 +35,10 @@ class SensorDetailPage extends StatefulWidget {
 }
 
 class _SensorDetailPageState extends State<SensorDetailPage> {
-  double? _currentValue;  // Nullable to handle the initial value
+  double? _currentValue;
   List<SensorDataPoint> _dataPoints = [];
   late StreamSubscription<DatabaseEvent> _sensorSubscription;
-  bool _isDataLoaded = false; // Flag to track data loading status
+  bool _isDataLoaded = false;
 
   @override
   void initState() {
@@ -57,7 +57,7 @@ class _SensorDetailPageState extends State<SensorDetailPage> {
 
         setState(() {
           _currentValue = value;
-          _isDataLoaded = true;  // Data is loaded
+          _isDataLoaded = true;
           _dataPoints.add(SensorDataPoint(DateTime.now(), value));
           if (_dataPoints.length > 100) _dataPoints.removeAt(0);
         });
@@ -67,8 +67,8 @@ class _SensorDetailPageState extends State<SensorDetailPage> {
 
   @override
   void dispose() {
-    _sensorSubscription.cancel(); // Cancel the Firebase listener
-    _dataPoints.clear(); // Clean slate before widget is disposed
+    _sensorSubscription.cancel();
+    _dataPoints.clear();
     super.dispose();
   }
 
@@ -98,40 +98,40 @@ class _SensorDetailPageState extends State<SensorDetailPage> {
 
   Widget _buildCircularGauge() {
     return SizedBox(
-      child: SfRadialGauge(
-        enableLoadingAnimation: true, // Enable initial loading animation
-        title: GaugeTitle(
+      child: gauges.SfRadialGauge(
+        enableLoadingAnimation: true,
+        title: gauges.GaugeTitle(
           text: '${widget.sensorName} Reading',
           textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        axes: <RadialAxis>[
-          RadialAxis(
+        axes: <gauges.RadialAxis>[
+          gauges.RadialAxis(
             minimum: widget.minValue,
             maximum: widget.maxValue,
-            pointers: <GaugePointer>[
-              NeedlePointer(
-                value: _currentValue ?? widget.minValue, // Default to min value
-                needleColor: Colors.red,  // Always red needle
+            pointers: <gauges.GaugePointer>[
+              gauges.NeedlePointer(
+                value: _currentValue ?? widget.minValue,
+                needleColor: Colors.red,
                 needleLength: 0.65,
-                enableAnimation: true, // Enable animation
-                animationDuration: 1000, // Animation duration in milliseconds
-                animationType: AnimationType.ease, // Animation type (ease, linear, etc.)
-                knobStyle: const KnobStyle(
+                enableAnimation: true,
+                animationDuration: 1000,
+                animationType: gauges.AnimationType.ease,
+                knobStyle: const gauges.KnobStyle(
                   knobRadius: 0.1,
-                  sizeUnit: GaugeSizeUnit.factor,
+                  sizeUnit: gauges.GaugeSizeUnit.factor,
                   color: Colors.red,
                 ),
               ),
             ],
-            axisLineStyle: AxisLineStyle(
-              gradient: SweepGradient(
-                colors: <Color>[Colors.green, Colors.red], // Green to Red gradient
-                stops: <double>[0.0, 1.0], // The gradient transition from green to red
+            axisLineStyle: gauges.AxisLineStyle(
+              gradient: const SweepGradient(
+                colors: <Color>[Colors.green, Colors.red],
+                stops: <double>[0.0, 1.0],
               ),
               thickness: 15,
             ),
-            annotations: <GaugeAnnotation>[
-              GaugeAnnotation(
+            annotations: <gauges.GaugeAnnotation>[
+              gauges.GaugeAnnotation(
                 widget: Text(
                   '${_currentValue?.toStringAsFixed(2) ?? widget.minValue.toStringAsFixed(2)} ${widget.unit}',
                   style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -148,22 +148,22 @@ class _SensorDetailPageState extends State<SensorDetailPage> {
 
   Widget _buildLinearGauge() {
     if (_currentValue == null || _currentValue!.isNaN || _currentValue! < widget.minValue || _currentValue! > widget.maxValue) {
-      return const SizedBox.shrink();  // Avoid building gauge if value is unsafe or null
+      return const SizedBox.shrink();
     }
 
     double safeValue = (_currentValue ?? widget.minValue).clamp(widget.minValue, widget.maxValue);
 
-    return SfLinearGauge(
+    return gauges.SfLinearGauge(
       minimum: widget.minValue,
       maximum: widget.maxValue,
       showLabels: true,
-      animateAxis: true, // Animate axis changes
-      animationDuration: 1000, // Animation duration in milliseconds
+      animateAxis: true,
+      animationDuration: 1000,
       markerPointers: [
-        LinearWidgetPointer(
+        gauges.LinearWidgetPointer(
           value: safeValue,
-          enableAnimation: true, // Enable animation for the widget pointer
-          animationDuration: 1000, // Animation duration in milliseconds
+          enableAnimation: true,
+          animationDuration: 1000,
           child: Container(
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
@@ -178,36 +178,36 @@ class _SensorDetailPageState extends State<SensorDetailPage> {
         ),
       ],
       barPointers: [
-        LinearBarPointer(
+        gauges.LinearBarPointer(
           value: safeValue,
           color: Colors.blueAccent,
-          enableAnimation: true, // Enable animation for the bar pointer
-          animationDuration: 1000, // Animation duration in milliseconds
+          enableAnimation: true,
+          animationDuration: 1000,
         ),
       ],
     );
   }
 
   Widget _buildLineChart() {
-    return SfCartesianChart(
-      title: ChartTitle(text: 'Live ${widget.sensorName} Data'),
-      primaryXAxis: DateTimeAxis(
-        intervalType: DateTimeIntervalType.seconds,
+    return charts.SfCartesianChart(
+      title: charts.ChartTitle(text: 'Live ${widget.sensorName} Data'),
+      primaryXAxis: charts.DateTimeAxis(
+        intervalType: charts.DateTimeIntervalType.seconds,
       ),
-      primaryYAxis: NumericAxis(
+      primaryYAxis: charts.NumericAxis(
         minimum: widget.minValue,
         maximum: widget.maxValue,
-        title: AxisTitle(text: widget.unit),
+        title: charts.AxisTitle(text: widget.unit),
       ),
-      series: <LineSeries<SensorDataPoint, DateTime>>[
-        LineSeries<SensorDataPoint, DateTime>(
+      series: <charts.LineSeries<SensorDataPoint, DateTime>>[
+        charts.LineSeries<SensorDataPoint, DateTime>(
           dataSource: _dataPoints,
           xValueMapper: (SensorDataPoint point, _) => point.time,
           yValueMapper: (SensorDataPoint point, _) => point.value,
           color: Colors.redAccent,
           width: 2,
-          markerSettings: const MarkerSettings(isVisible: true),
-          animationDuration: 500, // Add animation to the chart as well
+          markerSettings: const charts.MarkerSettings(isVisible: true),
+          animationDuration: 500,
         )
       ],
     );
